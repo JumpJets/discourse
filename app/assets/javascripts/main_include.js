@@ -6,6 +6,8 @@
 //= require ./ember-addons/decorator-alias
 //= require ./ember-addons/macro-alias
 //= require ./ember-addons/ember-computed-decorators
+//= require ./discourse/lib/emoji/data
+//= require ./discourse/lib/emoji
 //= require ./discourse/lib/hash
 //= require ./discourse/lib/load-script
 //= require ./discourse/lib/notification-levels
@@ -70,9 +72,8 @@
 //= require ./discourse/lib/link-mentions
 //= require ./discourse/components/site-header
 //= require ./discourse/lib/utilities
-//= require ./discourse/lib/emoji/emoji
-//= require ./discourse/lib/emoji/emoji-groups
-//= require ./discourse/lib/emoji/emoji-toolbar
+//= require ./discourse/lib/emoji/groups
+//= require ./discourse/lib/emoji/toolbar
 //= require ./discourse/components/d-editor
 //= require ./discourse/views/composer
 //= require ./discourse/lib/show-modal

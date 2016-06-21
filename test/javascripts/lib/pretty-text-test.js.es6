@@ -1,13 +1,15 @@
 import Quote from 'discourse/lib/quote';
 import Post from 'discourse/models/post';
 import PrettyText from 'discourse/lib/pretty-text';
+import { IMAGE_VERSION as v} from 'discourse/lib/emoji';
 
 module("lib:pretty-text");
 
 const defaultOpts = {
   traditionalMarkdownLinebreaks: false,
   defaultCodeLang: 'auto',
-  sanitize: true
+  sanitize: true,
+  features: { code: true, bbcode: true, emoji: true, details: true }
 };
 
 function cooked(input, expected, text) {
@@ -660,3 +662,24 @@ test("quotes with trailing formatting", function() {
         "<div class=\"quote-controls\"></div>EvilTrout:</div><blockquote><p>hello</p></blockquote></aside>\n\n<p><em>Test</em></p>",
         "it allows trailing formatting");
 });
+
+test("enable/disable features", () => {
+  const table = `<table><tr><th>hello</th></tr><tr><td>world</td></tr></table>`;
+  const hasTable = new PrettyText({ features: {table: true}, sanitize: true}).cook(table);
+  equal(hasTable, `<table class="md-table"><tr><th>hello</th></tr><tr><td>world</td></tr></table>`);
+
+  const noTable = new PrettyText({ features: { table: false }, sanitize: true}).cook(table);
+  equal(noTable, ``, 'tables are stripped when disabled');
+});
+
+test("emoji", () => {
+  cooked(":smile:", `<p><img src="/images/emoji/emoji_one/smile.png?v=${v}" class="emoji" alt=":smile:"></p>`);
+  cooked(":(", `<p><img src="/images/emoji/emoji_one/frowning.png?v=${v}" class="emoji" alt=":frowning:"></p>`);
+  cooked("8-)", `<p><img src="/images/emoji/emoji_one/sunglasses.png?v=${v}" class="emoji" alt=":sunglasses:"></p>`);
+});
+
+test("details", () => {
+  cooked("[details=hidden]secret txt[/details]",
+         "<p><details></p>\n\n<p>secret txt</p>\n\n<p></details></p>");
+});
+
